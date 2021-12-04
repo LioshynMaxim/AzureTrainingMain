@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using AutoMapper;
 using BlazorShared;
@@ -16,7 +16,6 @@ using Microsoft.eShopWeb.Infrastructure.Data;
 using Microsoft.eShopWeb.Infrastructure.Identity;
 using Microsoft.eShopWeb.Infrastructure.Logging;
 using Microsoft.eShopWeb.Infrastructure.Services;
-using Microsoft.eShopWeb.PublicApi.MiddleWares;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -85,6 +84,7 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddApplicationInsightsTelemetry(Configuration["APPINSIGHTS_CONNECTIONSTRING"]);
         services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddDefaultTokenProviders();
@@ -169,6 +169,7 @@ public class Startup
                     }
             });
         });
+        
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -178,8 +179,6 @@ public class Startup
         {
             app.UseDeveloperExceptionPage();
         }
-
-        app.UseMiddleware<ExceptionMiddleware>();
 
         app.UseHttpsRedirection();
 

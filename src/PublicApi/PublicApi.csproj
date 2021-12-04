@@ -6,13 +6,19 @@
     <UserSecretsId>5b662463-1efd-4bae-bde4-befe0be3e8ff</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
+    <ApplicationInsightsResourceId>/subscriptions/34aff902-3570-4bd8-94bc-da55fdc851c8/resourcegroups/ThirdTaskRG/providers/Microsoft.Insights/components/PublicApi</ApplicationInsightsResourceId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="MiddleWares\ExceptionMiddleware.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Ardalis.ApiEndpoints" Version="3.1.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.0" />
     <PackageReference Include="Microsoft.Identity.Web" Version="1.16.0" />
     <PackageReference Include="Microsoft.Identity.Web.UI" Version="1.16.0" />
@@ -38,6 +44,10 @@
   <ItemGroup>
     <ProjectReference Include="..\ApplicationCore\ApplicationCore.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="MiddleWares\" />
   </ItemGroup>
 
 
