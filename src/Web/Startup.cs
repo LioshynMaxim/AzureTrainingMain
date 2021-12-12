@@ -97,7 +97,7 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddCookieSettings();
-
+        services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
         services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
@@ -165,6 +165,7 @@ public class Startup
 
         services.AddScoped<ToastService>();
         services.AddScoped<HttpService>();
+        
         services.AddBlazorServices();
 
         services.AddDatabaseDeveloperPageExceptionFilter();

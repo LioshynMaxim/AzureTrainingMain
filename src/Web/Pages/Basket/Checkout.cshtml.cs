@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -13,6 +15,7 @@ using Microsoft.eShopWeb.ApplicationCore.Exceptions;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.eShopWeb.Infrastructure.Identity;
 using Microsoft.eShopWeb.Web.Interfaces;
+using Microsoft.Extensions.Options;
 
 namespace Microsoft.eShopWeb.Web.Pages.Basket;
 
@@ -25,18 +28,21 @@ public class CheckoutModel : PageModel
     private string _username = null;
     private readonly IBasketViewModelService _basketViewModelService;
     private readonly IAppLogger<CheckoutModel> _logger;
+    private readonly AppSettings appSettings;
 
     public CheckoutModel(IBasketService basketService,
         IBasketViewModelService basketViewModelService,
         SignInManager<ApplicationUser> signInManager,
         IOrderService orderService,
-        IAppLogger<CheckoutModel> logger)
+        IAppLogger<CheckoutModel> logger,
+        IOptions<AppSettings> options)
     {
         _basketService = basketService;
         _signInManager = signInManager;
         _orderService = orderService;
         _basketViewModelService = basketViewModelService;
         _logger = logger;
+        appSettings = options.Value;
     }
 
     public BasketViewModel BasketModel { get; set; } = new BasketViewModel();
@@ -56,8 +62,9 @@ public class CheckoutModel : PageModel
             {
                 return BadRequest();
             }
-
+            
             var updateModel = items.ToDictionary(b => b.Id.ToString(), b => b.Quantity);
+            CallAzureFunction(updateModel);
             await _basketService.SetQuantities(BasketModel.Id, updateModel);
             await _orderService.CreateOrderAsync(BasketModel.Id, new Address("123 Main St.", "Kent", "OH", "United States", "44240"));
             await _basketService.DeleteBasketAsync(BasketModel.Id);
@@ -97,5 +104,17 @@ public class CheckoutModel : PageModel
         var cookieOptions = new CookieOptions();
         cookieOptions.Expires = DateTime.Today.AddYears(10);
         Response.Cookies.Append(Constants.BASKET_COOKIENAME, _username, cookieOptions);
+    }
+
+    private void CallAzureFunction(Dictionary<string, int> order) 
+    {
+        using (var client = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate }))
+        {
+            client.BaseAddress = new Uri(appSettings.MyFunctionURL);
+            foreach (var item in order)
+            {
+                _ = client.GetAsync($"OrderItemsReserver?id={item.Key}&quantity={item.Value}").Result;
+            }
+        }
     }
 }
