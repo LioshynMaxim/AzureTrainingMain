@@ -1,14 +1,14 @@
 {
   "dependencies": {
-    "mssql1": {
-      "secretStore": "AzureAppSettings",
-      "type": "mssql.onprem",
-      "connectionId": "ConnectionStrings:CatalogConnection"
-    },
     "mssql2": {
       "secretStore": "AzureAppSettings",
       "type": "mssql.onprem",
       "connectionId": "ConnectionStrings:IdentityConnection"
+    },
+    "mssql1": {
+      "secretStore": "AzureAppSettings",
+      "type": "mssql.onprem",
+      "connectionId": "ConnectionStrings:CatalogConnection"
     }
   }
 }

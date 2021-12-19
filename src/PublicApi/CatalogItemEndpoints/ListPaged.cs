@@ -9,6 +9,7 @@ using Microsoft.eShopWeb.ApplicationCore.Entities;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.eShopWeb.ApplicationCore.Specifications;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.Extensions.Logging;
 
 namespace Microsoft.eShopWeb.PublicApi.CatalogItemEndpoints;
 
@@ -19,14 +20,17 @@ public class ListPaged : BaseAsyncEndpoint
     private readonly IRepository<CatalogItem> _itemRepository;
     private readonly IUriComposer _uriComposer;
     private readonly IMapper _mapper;
+    private readonly ILogger<ListPaged> _logger;
 
     public ListPaged(IRepository<CatalogItem> itemRepository,
         IUriComposer uriComposer,
-        IMapper mapper)
+        IMapper mapper, 
+        ILogger<ListPaged> logger)
     {
         _itemRepository = itemRepository;
         _uriComposer = uriComposer;
         _mapper = mapper;
+        _logger = logger;
     }
 
     [HttpGet("api/catalog-items")]
@@ -38,10 +42,17 @@ public class ListPaged : BaseAsyncEndpoint
     ]
     public override async Task<ActionResult<ListPagedCatalogItemResponse>> HandleAsync([FromQuery] ListPagedCatalogItemRequest request, CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Cannot move further");
+        _logger.LogWarning("Cannot move further");
+        _logger.LogError("Cannot move further");
+        _logger.LogCritical("Cannot move further");
+        throw new Exception("Cannot move further");
+
         var response = new ListPagedCatalogItemResponse(request.CorrelationId());
 
         var filterSpec = new CatalogFilterSpecification(request.CatalogBrandId, request.CatalogTypeId);
         int totalItems = await _itemRepository.CountAsync(filterSpec, cancellationToken);
+        _logger.LogTrace($"Total items in DB: {totalItems}");
 
         var pagedSpec = new CatalogFilterPaginatedSpecification(
             skip: request.PageIndex * request.PageSize,
