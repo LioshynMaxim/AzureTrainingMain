@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -16,6 +17,7 @@ using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.eShopWeb.Infrastructure.Identity;
 using Microsoft.eShopWeb.Web.Interfaces;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace Microsoft.eShopWeb.Web.Pages.Basket;
 
@@ -64,9 +66,13 @@ public class CheckoutModel : PageModel
             }
             
             var updateModel = items.ToDictionary(b => b.Id.ToString(), b => b.Quantity);
-            CallAzureFunction(updateModel);
-            await _basketService.SetQuantities(BasketModel.Id, updateModel);
-            await _orderService.CreateOrderAsync(BasketModel.Id, new Address("123 Main St.", "Kent", "OH", "United States", "44240"));
+            //CallAzureFunction(updateModel);
+            
+            var basket = await _basketService.SetQuantities(BasketModel.Id, updateModel);
+
+            var address = new Address("123 Main St.", "Kent", "OH", "United States", "44240");
+            await _orderService.CreateOrderAsync(BasketModel.Id, address);
+            await CallAzureFunctionDynamoDd(new CosmosDBModel(basket, "123 Main St., Kent, OH, United States, 44240"));
             await _basketService.DeleteBasketAsync(BasketModel.Id);
         }
         catch (EmptyBasketOnCheckoutException emptyBasketOnCheckoutException)
@@ -115,6 +121,35 @@ public class CheckoutModel : PageModel
             {
                 _ = client.GetAsync($"OrderItemsReserver?id={item.Key}&quantity={item.Value}").Result;
             }
+        }
+    }
+
+    private async Task CallAzureFunctionDynamoDd(CosmosDBModel model)
+    {
+        using (var client = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate }))
+        {
+            var uri = new Uri(appSettings.MyCosmosFunctionURL);
+            client.BaseAddress = uri;
+
+            var json = JsonConvert.SerializeObject(model);
+            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync(uri, data);
+        }
+    }
+
+    private class CosmosDBModel
+    {
+        public string BuyerId { get; private set; }
+        public decimal FinalPrice { get; set; }
+        public string Address { get; set; }
+        public IEnumerable<ApplicationCore.Entities.BasketAggregate.BasketItem> Items { get; set; }
+
+        public CosmosDBModel(ApplicationCore.Entities.BasketAggregate.Basket basket, string address)
+        {
+            BuyerId = basket.BuyerId;
+            Address = address;
+            FinalPrice = Math.Round(basket.Items.Sum(x => x.UnitPrice * x.Quantity), 2);
+            Items = basket.Items;
         }
     }
 }

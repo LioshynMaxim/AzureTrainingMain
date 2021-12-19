@@ -44,10 +44,10 @@ public class Startup
     public void ConfigureDevelopmentServices(IServiceCollection services)
     {
         // use in-memory database
-        ConfigureInMemoryDatabases(services);
+        //ConfigureInMemoryDatabases(services);
 
         // use real database
-        //ConfigureProductionServices(services);
+        ConfigureProductionServices(services);
     }
 
     public void ConfigureDockerServices(IServiceCollection services)
@@ -89,7 +89,7 @@ public class Startup
 
     public void ConfigureTestingServices(IServiceCollection services)
     {
-        ConfigureInMemoryDatabases(services);
+        ConfigureProductionServices(services);
     }
 
 

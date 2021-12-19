@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorAdmin", "src\BlazorAd
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorShared", "src\BlazorShared\BlazorShared.csproj", "{715CF7AF-A1EE-40A6-94A0-8DA3F3B2CAE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureFunctionApp", "..\AzureFunctionApp\AzureFunctionApp.csproj", "{752A88A4-8939-4440-A0E1-97B2A69163B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureFunctionApp", "..\AzureFunctionApp\AzureFunctionApp.csproj", "{752A88A4-8939-4440-A0E1-97B2A69163B4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ARMS", "ARMS", "{CD00EF40-65F7-4B06-A83C-01ABC09E7D30}"
 	ProjectSection(SolutionItems) = preProject
