@@ -9,6 +9,12 @@
       "secretStore": "AzureAppSettings",
       "type": "mssql.onprem",
       "connectionId": "ConnectionStrings:CatalogConnection"
+    },
+    "secrets1": {
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.KeyVault/vaults/CloudX-Lioshyn-Key-vault",
+      "type": "secrets.keyVault",
+      "connectionId": "VaultUri"
     }
   }
 }
