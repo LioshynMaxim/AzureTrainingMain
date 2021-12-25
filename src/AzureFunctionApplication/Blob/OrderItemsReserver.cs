@@ -1,21 +1,28 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Newtonsoft.Json;
-using System;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace AzureFunctionApplication.Blob
 {
     public class OrderItemsReserver
     {
+        private static IConfiguration _configuration { get; set; }
+
+        public OrderItemsReserver(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         private const string containerName = "lioshyncontainer";
         [FunctionName("OrderItemsReserver")]
         public async Task<IActionResult> Run(
@@ -36,8 +43,8 @@ namespace AzureFunctionApplication.Blob
 
         private async static Task CreateBlob(string name, OrderData data, ILogger log)
         {
-            string connectionString = Environment.GetEnvironmentVariable("AzureBlob");
-
+            
+            var connectionString = _configuration["AzureBlob"];
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(connectionString);
             CloudBlobClient client = storageAccount.CreateCloudBlobClient();
             CloudBlobContainer container = client.GetContainerReference(containerName);

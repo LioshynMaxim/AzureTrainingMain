@@ -1,20 +1,16 @@
 {
   "dependencies": {
+    "storage1": {
+      "secretStore": "AzureKeyVault",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/lioshynstorageaccount",
+      "type": "storage.azure",
+      "connectionId": "AzureBlob"
+    },
     "secrets1": {
       "secretStore": "AzureAppSettings",
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.KeyVault/vaults/cloudx-lioshyn-key-vault",
       "type": "secrets.keyVault",
       "connectionId": "VaultUri"
-    },
-    "mssql2": {
-      "secretStore": "AzureKeyVault",
-      "type": "mssql.onprem",
-      "connectionId": "ConnectionStrings:IdentityConnection"
-    },
-    "mssql1": {
-      "secretStore": "AzureKeyVault",
-      "type": "mssql.onprem",
-      "connectionId": "ConnectionStrings:CatalogConnection"
     }
   }
 }
