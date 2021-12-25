@@ -74,6 +74,7 @@ public class Startup
 
     public void ConfigureProductionServices(IServiceCollection services)
     {
+        var connString = Configuration.GetConnectionString("CatalogConnection");
         // use real database
         // Requires LocalDB which can be installed with SQL Server Express 2016
         // https://www.microsoft.com/en-us/download/details.aspx?id=54284

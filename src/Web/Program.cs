@@ -7,6 +7,8 @@ using Microsoft.eShopWeb.Infrastructure.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Azure.Identity;
+using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.eShopWeb.Web;
 
@@ -42,7 +44,13 @@ public class Program
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
+        .ConfigureAppConfiguration((context, config) =>
+            {
+                var settings = config.Build();
+                var keyVaultEndpoint = new Uri(settings["baseUrls:VaultUri"]);
+                config.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
+            })
+        .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
             });
