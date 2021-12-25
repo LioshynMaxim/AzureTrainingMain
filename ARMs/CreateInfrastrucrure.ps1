@@ -26,4 +26,8 @@ New-AzResourceGroupDeployment `
     -ResourceGroupName $resourceGroupName `
     -TemplateFile .\CreateStorageAccount.json 
 
+New-AzResourceGroupDeployment `
+    -ResourceGroupName $resourceGroupName `
+    -TemplateFile .\Secrets.json 
+
 # Read-Host -Prompt "Press [ENTER] to continue ..."
