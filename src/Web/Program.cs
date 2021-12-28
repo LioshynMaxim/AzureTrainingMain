@@ -44,12 +44,12 @@ public class Program
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
-        .ConfigureAppConfiguration((context, config) =>
-            {
-                var settings = config.Build();
-                var keyVaultEndpoint = new Uri(settings["baseUrls:VaultUri"]);
-                config.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
-            })
+        //.ConfigureAppConfiguration((context, config) =>
+        //    {
+        //        var settings = config.Build();
+        //        var keyVaultEndpoint = new Uri(settings["baseUrls:VaultUri"]);
+        //        config.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
+        //    })
         .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
