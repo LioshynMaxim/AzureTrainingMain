@@ -1,11 +1,5 @@
 {
   "dependencies": {
-    "secrets1": {
-      "secretStore": "AzureAppSettings",
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.KeyVault/vaults/cloudx-lioshyn-key-vault",
-      "type": "secrets.keyVault",
-      "connectionId": "VaultUri"
-    },
     "mssql2": {
       "secretStore": "AzureKeyVault",
       "type": "mssql.onprem",
