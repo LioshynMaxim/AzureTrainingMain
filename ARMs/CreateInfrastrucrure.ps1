@@ -16,7 +16,6 @@ New-AzResourceGroupDeployment `
     -AdministratorLogin $adminUser `
     -AdministratorLoginPassword $adminPassword `
     -TemplateFile .\CreateDatabase.json 
-#-TemplateFile .\CreateServicePlan.json
 
 New-AzResourceGroupDeployment `
     -ResourceGroupName $resourceGroupName `

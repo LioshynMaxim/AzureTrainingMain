@@ -1,9 +1,5 @@
 {
   "dependencies": {
-    "storage1": {
-      "type": "storage",
-      "connectionId": "AzureBlob"
-    },
     "secrets1": {
       "type": "secrets",
       "connectionId": "VaultUri"

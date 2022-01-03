@@ -1,10 +1,15 @@
 {
   "dependencies": {
     "secrets1": {
-      "secretStore": null,
+      "secretStore": "AzureAppSettings",
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.KeyVault/vaults/cloudx-lioshyn-key-vault",
       "type": "secrets.keyVault",
       "connectionId": "VaultUri"
+    },
+    "identityapp.aad1": {
+      "secretStore": "AzureAppSettings",
+      "type": "identityapp.aad.callsgraph_api",
+      "connectionId": "AzureAD:ClientSecret"
     }
   }
 }

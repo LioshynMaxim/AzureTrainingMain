@@ -25,7 +25,8 @@ namespace AzureFunctionApplication.Blob
         }
 
         private const string containerName = "lioshyncontainer";
-        private const string connectionString = "Endpoint=sb://messagebuslioshyn.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=RcbyPzSlHl6tSdv8Y7RcEHmTeyW4tvO+HiAHQVLR4gE=";
+        private const string connectionStringServiceBus = "Endpoint=sb://servicebusslioshyn.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=iSoip23cBSXcEEdViM2wAeRvWazaAME/x2hOFxoMws8=";
+        private const string connectionStringBlob = "DefaultEndpointsProtocol=https;AccountName=lioshynstorageaccount;AccountKey=6WFGWqX6f5q7TUf0EgOUsbb6SkoTWc6c8Iv9n5LLe5b9sLWJqGxt7oigbgqu2lIewpEhbGtv7qPhCXuDxXRSbA==;BlobEndpoint=https://lioshynstorageaccount.blob.core.windows.net/;TableEndpoint=https://lioshynstorageaccount.table.core.windows.net/;QueueEndpoint=https://lioshynstorageaccount.queue.core.windows.net/;FileEndpoint=https://lioshynstorageaccount.file.core.windows.net/";
         [FunctionName("OrderItemsReserver")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
@@ -46,7 +47,7 @@ namespace AzureFunctionApplication.Blob
 
         private async static Task CreateBlob(string name, OrderData data, ILogger log)
         {
-            
+
             var connectionString = _configuration["AzureBlob"];
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(connectionString);
             CloudBlobClient client = storageAccount.CreateCloudBlobClient();
@@ -61,7 +62,7 @@ namespace AzureFunctionApplication.Blob
 
         private async Task WriteInServiceBus(OrderData data) 
         {
-            await using var client = new ServiceBusClient(connectionString);
+            await using var client = new ServiceBusClient(connectionStringServiceBus);
             ServiceBusSender sender = client.CreateSender("servicebus");
             var message = new ServiceBusMessage(JsonConvert.SerializeObject(data));
             await sender.SendMessageAsync(message);

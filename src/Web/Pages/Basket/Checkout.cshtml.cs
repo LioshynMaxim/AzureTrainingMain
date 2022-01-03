@@ -81,11 +81,11 @@ public class CheckoutModel : PageModel
 
             try
             {
-
+                await CallAzureFunctionDynamoDd(new CosmosDBModel(basket, "123 Main St., Kent, OH, United States, 44240"));
             }
             catch
             {
-                await CallAzureFunctionDynamoDd(new CosmosDBModel(basket, "123 Main St., Kent, OH, United States, 44240"));
+                
             }
             
             await _basketService.DeleteBasketAsync(BasketModel.Id);

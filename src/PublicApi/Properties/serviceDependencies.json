@@ -8,12 +8,20 @@
       "type": "mssql",
       "connectionId": "ConnectionStrings:IdentityConnection"
     },
-    "secrets1": {
-      "type": "secrets"
-    },
     "appInsights1": {
       "type": "appInsights",
       "connectionId": "APPINSIGHTS_CONNECTIONSTRING"
+    },
+    "apis1": {
+      "type": "apis"
+    },
+    "secrets1": {
+      "type": "secrets",
+      "connectionId": "VaultUri"
+    },
+    "identityapp.aad1": {
+      "type": "identityapp.aad",
+      "connectionId": "AzureAD:ClientSecret"
     }
   }
 }

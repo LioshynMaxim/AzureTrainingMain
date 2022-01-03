@@ -17,7 +17,7 @@ namespace AzureFunctionApplication.CosmosDB
         private CosmosClient _cosmosClient;
         private Database _database;
         private Container _container;
-        private const string _primaryKey = "LEv98YrybA9Nnqu0UgAYkRz2jQPg2Jt1a7Gqs2rv7PS8AvCvW45QfMKHxCsmGlq2fE5QmRfb8pOUUp16YksoiA==";
+        private const string _primaryKey = "Jbkx5Z3xb86zZzTXIC2ABMdJ5eEe9JKl36Pww8coQihTlH3PZKueEmNlej5yayKKzkARNl86jHc9PBVjnTx2Yw==";
         private const string _endpointUrl = "https://tetetelioshyn.documents.azure.com:443/";
 
         [FunctionName("OrderItemsReserverCosmosDB")]
